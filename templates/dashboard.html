@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CyberSentinel - Real-Time Lab</title>
+<meta http-equiv="refresh" content="5">
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:30px}
+h1{margin-bottom:5px}.sub{color:#94a3b8}
+.cards{display:flex;gap:15px;flex-wrap:wrap;margin:25px 0}
+.card{background:#1e293b;padding:18px 24px;border-radius:10px;min-width:120px}
+.value{font-size:30px;font-weight:bold}
+table{width:100%;border-collapse:collapse;background:#1e293b}
+th,td{padding:12px;border-bottom:1px solid #334155;text-align:left}
+.badge{font-weight:bold}
+small{color:#94a3b8}
+code{word-break:break-all}
+</style>
+</head>
+<body>
+<h1>🛡️ CyberSentinel</h1>
+<div class="sub">Real-time monitoring lab — local Flask application</div>
+
+<div class="cards">
+  <div class="card">Total<div class="value">{{ stats.total }}</div></div>
+  <div class="card">Critical<div class="value">{{ stats.critical }}</div></div>
+  <div class="card">High<div class="value">{{ stats.high }}</div></div>
+  <div class="card">Medium<div class="value">{{ stats.medium }}</div></div>
+  <div class="card">Low<div class="value">{{ stats.low }}</div></div>
+</div>
+
+<table>
+<tr><th>Time</th><th>IP</th><th>Type</th><th>Severity</th><th>Score</th><th>Evidence</th></tr>
+{% for a in alerts %}
+<tr>
+<td>{{ a.timestamp }}</td>
+<td>{{ a.ip }}</td>
+<td>{{ a.type }}</td>
+<td class="badge">{{ a.severity }}</td>
+<td>{{ a.score }}/100</td>
+<td><code>{{ a.evidence }}</code></td>
+</tr>
+{% else %}
+<tr><td colspan="6">No alerts yet. Use the local test URLs from the README.</td></tr>
+{% endfor %}
+</table>
+</body>
+</html>
