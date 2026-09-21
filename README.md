@@ -1,80 +1,275 @@
-# CyberSentinel — Real-Time Security Monitoring Lab
+# CyberSentinel
 
-A personal Python cybersecurity project designed to practice Python while building a small **real-time security monitoring and threat-detection lab**.
+## Real-Time Security Monitoring & Threat Detection Lab
 
-## What changed from the first version?
+CyberSentinel is a personal cybersecurity project developed in Python to explore real-time HTTP request monitoring and basic threat detection.
 
-The first version used simulated log entries. This version monitors **real HTTP requests received by the local Flask lab application** and stores detected alerts in SQLite.
+The application monitors requests received by a local Flask web application, analyzes them for suspicious patterns, generates security alerts, and displays the detected events through a monitoring dashboard.
 
-Architecture:
+> This project is an educational cybersecurity lab designed for controlled local testing. It is not intended to be used as a production SIEM or IDS.
 
-Browser / local test request
-→ Flask lab application
-→ request monitoring
-→ detection rules
-→ SQLite
-→ dashboard
+---
 
-## Current detections
+## Objectives
 
-- SQL Injection patterns
-- XSS patterns
-- Severity and risk score
-- Timestamp, source IP and evidence
-- SQLite alert history
+The main objectives of this project were to:
 
-This is an educational local lab. It is not a production SIEM or IDS.
+- Improve my Python development skills
+- Apply Python to a concrete cybersecurity problem
+- Understand basic HTTP request monitoring
+- Implement simple attack-pattern detection
+- Store and visualize security alerts
+- Practice automated testing with Pytest
+- Explore the foundations of security monitoring and SOC workflows
 
-## Run
+---
 
-```powershell
+## Features
+
+CyberSentinel currently provides:
+
+- Real-time monitoring of HTTP requests received by the Flask application
+- SQL Injection pattern detection
+- XSS pattern detection
+- Severity classification
+- Risk scoring
+- Alert evidence recording
+- Source IP address recording
+- Timestamp recording
+- SQLite alert storage
+- Web-based monitoring dashboard
+- Automated tests with Pytest
+
+---
+
+## Detection Examples
+
+The current detection engine focuses on simple pattern-based detection.
+
+### SQL Injection
+
+Examples of detected patterns:
+
+```text
+' OR 1=1
+UNION SELECT
+SLEEP(
+information_schema
+DROP TABLE
+Cross-Site Scripting (XSS)
+
+Examples include:
+
+<script>
+javascript:
+onerror=
+onload=
+
+The application also decodes URL-encoded requests before analysis.
+
+For example:
+
+%27%20OR%201%3D1
+
+can be decoded and analyzed as:
+
+' OR 1=1
+Architecture
+                 HTTP Request
+                       |
+                       v
+              +-----------------+
+              |    Flask App    |
+              +--------+--------+
+                       |
+                       v
+              +-----------------+
+              | Detection Engine|
+              +--------+--------+
+                       |
+             +---------+---------+
+             |                   |
+             v                   v
+      SQL Injection             XSS
+             |                   |
+             +---------+---------+
+                       |
+                       v
+                Security Alert
+                       |
+                       v
+                SQLite Database
+                       |
+                       v
+              Monitoring Dashboard
+Technologies
+Python
+Flask
+SQLite
+HTML / CSS
+Pytest
+Git / GitHub
+Project Structure
+CyberSentinel-Realtime/
+|
+├── app.py
+├── README.md
+├── requirements.txt
+├── .gitignore
+|
+├── screenshots/
+│   ├── dashboard.png
+│   ├── detection.png
+│   └── tests.png
+|
+├── src/
+│   ├── detector.py
+│   └── storage.py
+|
+├── templates/
+│   └── dashboard.html
+|
+└── tests/
+    └── test_detector.py
+Installation
+
+Clone the repository:
+
+git clone https://github.com/YOUR_USERNAME/cybersentinel-realtime.git
+cd cybersentinel-realtime
+
+Create a virtual environment:
+
 python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python app.py
-```
 
-Open:
+Activate it on Windows:
+
+.venv\Scripts\Activate.ps1
+
+Install the dependencies:
+
+pip install -r requirements.txt
+Running the Application
+
+Start the Flask application:
+
+python app.py
+
+Then open:
 
 http://127.0.0.1:5000
 
-## Test the detection locally
+The dashboard displays detected security events in real time.
 
-Normal request:
+Testing
 
-http://127.0.0.1:5000/search?q=python
+Run the automated tests:
 
-SQL injection test:
-
-http://127.0.0.1:5000/search?q=%27%20OR%201%3D1
-
-XSS test:
-
-http://127.0.0.1:5000/search?q=%3Cscript%3Ealert(1)%3C/script%3E
-
-These requests target only your own local lab application.
-
-## Tests
-
-```powershell
 python -m pytest
-```
+
+The tests cover:
+
+SQL Injection detection
+XSS detection
+Normal request handling
 
 Expected result:
 
-```text
 3 passed
-```
+Local Security Testing
 
-## Technologies
+The application can be tested using controlled requests against the local Flask server.
 
-Python, Flask, SQLite, Pytest, HTML/CSS
+Normal Request
+http://127.0.0.1:5000/search?q=python
+SQL Injection Test
+http://127.0.0.1:5000/search?q=%27%20OR%201%3D1
+XSS Test
+http://127.0.0.1:5000/search?q=%3Cscript%3Ealert(1)%3C/script%3E
 
-## Future improvements
+These tests are performed against my own local application in a controlled environment.
 
-- authentication and RBAC
-- brute-force detection over time windows
-- charts and alert filtering
-- Docker
-- Wazuh integration
-- more robust parsing and detection rules
+Dashboard
+
+The monitoring dashboard provides an overview of detected security events, including:
+
+Total alerts
+Severity levels
+Attack type
+Source IP
+Risk score
+Timestamp
+Evidence
+Dashboard Screenshot
+
+Detection Test
+
+The following screenshot shows a controlled security test and the corresponding alert generated by CyberSentinel.
+
+Automated Tests
+
+The project includes automated tests using Pytest.
+
+Security Approach
+
+The current version uses a lightweight rule-based detection approach.
+
+Incoming HTTP requests are:
+
+Received by the Flask application
+Decoded if necessary
+Analyzed against predefined detection patterns
+Classified according to the detected threat
+Assigned a severity and risk score
+Stored in SQLite
+Displayed on the monitoring dashboard
+
+This approach is intentionally simple and designed for learning and experimentation.
+
+Future Improvements
+
+Planned improvements include:
+
+Authentication and access control
+More advanced detection rules
+Brute-force detection
+Improved request analysis
+IP reputation checks
+Alert filtering and search
+Docker deployment
+Wazuh integration
+More comprehensive automated tests
+Improved dashboard visualizations
+Disclaimer
+
+CyberSentinel is an educational cybersecurity project.
+
+All security testing demonstrated in this repository is performed against applications and systems under my control in a controlled local environment.
+
+The detection engine is based on predefined patterns and should not be considered a complete or production-ready intrusion detection system.
+
+Author
+
+Abderrahman Hamani
+
+Engineering Student — Computer Science / AI / Robotics / Networks
+
+Interested in:
+
+Cybersecurity
+Security Monitoring
+Python
+Web Security
+SOC / Blue Team
+
+### Pour les screenshots
+
+Oui, garde **3 screenshots maximum** :
+
+1. `dashboard.png` — le dashboard avec les alertes
+2. `detection.png` — une requête de test + l'alerte détectée
+3. `tests.png` — le terminal avec `3 passed`
+
+Ça suffit. Pas besoin de mettre beaucoup de captures d'écran ni de captures de code.
+
+Et surtout, **ne mets pas de screenshot du code comme élément principal** : le recruteur peut directement consulter ton code sur GitHub.
